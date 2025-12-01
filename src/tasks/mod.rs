@@ -39,3 +39,16 @@ pub trait Task {
 fn name_from_file(file: &str) -> &str {
     file.split('\\').last().unwrap().split('.').next().unwrap()
 }
+
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_all() {
+        get_tasks().iter().for_each(|entry| {
+            let task = entry.1;
+            let result = task.run(task.test_data());
+            assert_eq!(result, task.test_answer());
+        })
+    }
+}
