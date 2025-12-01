@@ -1,12 +1,15 @@
 use std::collections::HashMap;
 use t01a::Task01a;
+use crate::tasks::t01b::Task01b;
 
 mod t01a;
+mod t01b;
 
 pub fn get_tasks() -> HashMap<&'static str, &'static dyn Task> {
-    HashMap::from([T01A.entry()])
+    HashMap::from([T01A.entry(), T01B.entry()])
 }
 const T01A: Task01a = Task01a::new();
+const T01B: Task01b = Task01b::new();
 
 pub trait Task {
     fn run(&self, data: &str) -> String;
@@ -40,6 +43,7 @@ fn name_from_file(file: &str) -> &str {
     file.split('\\').last().unwrap().split('.').next().unwrap()
 }
 
+#[cfg(test)]
 mod test {
     use super::*;
 
