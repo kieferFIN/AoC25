@@ -1,18 +1,19 @@
 use std::collections::HashMap;
 use t01a::Task01a;
 use crate::tasks::t01b::Task01b;
-use crate::tasks::t02a::Task02a;
+use crate::tasks::t02::{Task02a, Task02b};
 
 mod t01a;
 mod t01b;
-mod t02a;
+mod t02;
 
 pub fn get_tasks() -> HashMap<&'static str, &'static dyn Task> {
-  HashMap::from([T01A.entry(), T01B.entry(), T02A.entry()])
+  HashMap::from([T01A.entry(), T01B.entry(), T02A.entry(), T02B.entry()])
 }
 const T01A: Task01a = Task01a::new();
 const T01B: Task01b = Task01b::new();
 const T02A: Task02a = Task02a::new();
+const T02B: Task02b = Task02b::new();
 
 pub trait Task {
   fn run(&self, data: &str) -> String;
