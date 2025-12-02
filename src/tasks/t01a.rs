@@ -46,6 +46,7 @@ struct Dial {
   value: i32,
   hits: u16,
 }
+
 impl Dial {
   pub fn new() -> Dial {
     Dial { value: 50, hits: 0 }
@@ -75,6 +76,7 @@ impl ops::Add<Rot> for Dial {
     Dial { value, hits }
   }
 }
+
 #[derive(PartialEq, Eq)]
 enum Dir {
   L,
@@ -96,7 +98,7 @@ impl FromStr for Rot {
       "R" => Dir::R,
       _ => return Err(format!("Unknown direction: {}", f)),
     };
-    let len = n.trim().parse::<i32>().map_err(|e| format!("{}, value: {}", e.to_string(),n ))?;
+    let len = n.trim().parse::<i32>().map_err(|e| format!("{}, value: {}", e.to_string(), n))?;
 
     Ok(Rot { len, dir })
   }

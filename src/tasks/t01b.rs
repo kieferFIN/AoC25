@@ -47,6 +47,7 @@ struct Dial {
   value: i32,
   hits: u16,
 }
+
 impl Dial {
   pub fn new() -> Dial {
     Dial { value: 50, hits: 0 }
@@ -68,7 +69,7 @@ impl ops::Add<Rot> for Dial {
     };
     let mut hits = self.hits;
     let mut value = self.value;
-    for _ in 0 ..rot.len{
+    for _ in 0..rot.len {
       value = op(value, 1);
       if value % 100 == 0 {
         hits += 1;
@@ -79,6 +80,7 @@ impl ops::Add<Rot> for Dial {
     Dial { value, hits }
   }
 }
+
 #[derive(PartialEq, Eq)]
 enum Dir {
   L,

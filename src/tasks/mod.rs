@@ -10,6 +10,7 @@ mod t02;
 pub fn get_tasks() -> HashMap<&'static str, &'static dyn Task> {
   HashMap::from([T01A.entry(), T01B.entry(), T02A.entry(), T02B.entry()])
 }
+
 const T01A: Task01a = Task01a::new();
 const T01B: Task01b = Task01b::new();
 const T02A: Task02a = Task02a::new();
@@ -23,8 +24,8 @@ pub trait Task {
   fn name(&self) -> &str;
 
   fn entry(&self) -> (&str, &dyn Task)
-  where
-    Self: Sized,
+    where
+      Self: Sized,
   {
     (self.name(), self)
   }

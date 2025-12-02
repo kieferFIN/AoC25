@@ -32,6 +32,7 @@ impl Task for Task02b {
     "t02b"
   }
 }
+
 pub struct Task02a {}
 
 impl Task02a {
@@ -72,8 +73,8 @@ struct InvalidFinderIter<I> {
 }
 
 impl<'a, I> InvalidFinderIter<I>
-where
-  I: Iterator<Item = StringRange<'a>>,
+  where
+    I: Iterator<Item=StringRange<'a>>,
 {
   pub fn new(iter: I, validator: fn(usize) -> bool) -> Self {
     InvalidFinderIter {
@@ -86,8 +87,8 @@ where
 }
 
 impl<'a, I> Iterator for InvalidFinderIter<I>
-where
-  I: Iterator<Item = StringRange<'a>>,
+  where
+    I: Iterator<Item=StringRange<'a>>,
 {
   type Item = usize;
 
@@ -112,7 +113,7 @@ where
   }
 }
 
-trait InvalidFinderTrait<'a>: Iterator<Item = StringRange<'a>> + Sized {
+trait InvalidFinderTrait<'a>: Iterator<Item=StringRange<'a>> + Sized {
   fn find_invalids(self) -> InvalidFinderIter<Self> {
     InvalidFinderIter::new(self, is_invalid_strict)
   }
@@ -121,7 +122,7 @@ trait InvalidFinderTrait<'a>: Iterator<Item = StringRange<'a>> + Sized {
   }
 }
 
-impl<'a, I: Iterator<Item = StringRange<'a>>> InvalidFinderTrait<'a> for I {}
+impl<'a, I: Iterator<Item=StringRange<'a>>> InvalidFinderTrait<'a> for I {}
 
 fn is_invalid_strict(number: usize) -> bool {
   let s = number.to_string();
