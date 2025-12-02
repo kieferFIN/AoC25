@@ -8,7 +8,7 @@ mod t01b;
 mod t02a;
 
 pub fn get_tasks() -> HashMap<&'static str, &'static dyn Task> {
-  HashMap::from([T01A.entry(), T01B.entry()])
+  HashMap::from([T01A.entry(), T01B.entry(), T02A.entry()])
 }
 const T01A: Task01a = Task01a::new();
 const T01B: Task01b = Task01b::new();
