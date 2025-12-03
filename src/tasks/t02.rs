@@ -2,66 +2,28 @@ use crate::tasks::Task;
 
 const TEST_DATA: &str = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124";
 
-pub struct Task02b {}
+pub const T02A: Task = Task::new("t02a", TEST_DATA, "1227775554", run_a);
+pub const T02B: Task = Task::new("t02b", TEST_DATA, "4174379265", run_b);
 
-impl Task02b {
-  pub const fn new() -> Task02b {
-    Task02b {}
-  }
+
+fn run_b(data: &str) -> String {
+  data.trim()
+      .split(',')
+      .filter_map(|range| range.split_once('-'))
+      .find_all_invalids()
+      .sum::<usize>()
+      .to_string()
 }
 
-impl Task for Task02b {
-  fn run(&self, data: &str) -> String {
-    data.trim()
-        .split(',')
-        .filter_map(|range| range.split_once('-'))
-        .find_all_invalids()
-        .sum::<usize>()
-        .to_string()
-  }
-
-  fn test_data(&self) -> &str {
-    TEST_DATA
-  }
-
-  fn test_answer(&self) -> &str {
-    "4174379265"
-  }
-
-  fn name(&self) -> &str {
-    "t02b"
-  }
+fn run_a(data: &str) -> String {
+  data.trim()
+      .split(',')
+      .filter_map(|range| range.split_once('-'))
+      .find_invalids()
+      .sum::<usize>()
+      .to_string()
 }
 
-pub struct Task02a {}
-
-impl Task02a {
-  pub const fn new() -> Task02a {
-    Task02a {}
-  }
-}
-
-impl Task for Task02a {
-  fn run(&self, data: &str) -> String {
-    data.trim()
-        .split(',')
-        .filter_map(|range| range.split_once('-'))
-        .find_invalids()
-        .sum::<usize>()
-        .to_string()
-  }
-  fn test_data(&self) -> &str {
-    TEST_DATA
-  }
-
-  fn test_answer(&self) -> &str {
-    "1227775554"
-  }
-
-  fn name(&self) -> &str {
-    "t02a"
-  }
-}
 
 type StringRange<'a> = (&'a str, &'a str);
 

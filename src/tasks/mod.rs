@@ -1,36 +1,55 @@
-use std::collections::HashMap;
-use t01a::Task01a;
-use crate::tasks::t01b::Task01b;
-use crate::tasks::t02::{Task02a, Task02b};
+use crate::tasks::t01::{T01A, T01B};
+use crate::tasks::t02::{T02A, T02B};
 
-mod t01a;
-mod t01b;
+mod t01;
 mod t02;
 
-pub fn get_tasks() -> HashMap<&'static str, &'static dyn Task> {
-  HashMap::from([T01A.entry(), T01B.entry(), T02A.entry(), T02B.entry()])
+const N: usize = 4;
+const ALL_TASKS: [(&str, &Task); N] = [T01A.entry(), T01B.entry(), T02A.entry(), T02B.entry()];
+
+pub fn get_tasks() -> impl Iterator<Item=&'static Task> {
+  ALL_TASKS.iter().map(|entry| entry.1)
 }
 
-const T01A: Task01a = Task01a::new();
-const T01B: Task01b = Task01b::new();
-const T02A: Task02a = Task02a::new();
-const T02B: Task02b = Task02b::new();
+pub fn find_task(name: &str) -> Option<&'static Task> {
+  ALL_TASKS.iter().find(|entry| entry.0 == name).map(|entry| entry.1)
+}
 
-pub trait Task {
-  fn run(&self, data: &str) -> String;
-  fn test_data(&self) -> &str;
-  fn test_answer(&self) -> &str;
+pub struct Task {
+  name: &'static str,
+  test_data: &'static str,
+  answer: &'static str,
+  task: fn(&str) -> String,
+}
 
-  fn name(&self) -> &str;
+impl Task {
+  pub const fn new(name: &'static str, test_data: &'static str, answer: &'static str, task: fn(&str) -> String) -> Self {
+    Task { name, test_data, answer, task }
+  }
+  pub fn run(&self, data: &str) -> String {
+    (self.task)(data)
+  }
 
-  fn entry(&self) -> (&str, &dyn Task)
+  const fn test_data(&self) -> &str {
+    self.test_data
+  }
+
+  const fn test_answer(&self) -> &str {
+    self.answer
+  }
+
+  pub const fn name(&self) -> &str {
+    self.name
+  }
+
+  const fn entry(&self) -> (&str, &Task)
     where
       Self: Sized,
   {
     (self.name(), self)
   }
 
-  fn test(&self) {
+  pub fn test(&self) {
     println!("*******");
     println!("testing {}", self.name());
     let data = self.test_data();
@@ -44,18 +63,13 @@ pub trait Task {
   }
 }
 
-fn name_from_file(file: &str) -> &str {
-  file.split('\\').last().unwrap().split('.').next().unwrap()
-}
-
 #[cfg(test)]
 mod test {
   use super::*;
 
   #[test]
   fn test_all() {
-    get_tasks().iter().for_each(|entry| {
-      let task = entry.1;
+    get_tasks().for_each(|task| {
       let result = task.run(task.test_data());
       assert_eq!(result, task.test_answer());
     })

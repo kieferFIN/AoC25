@@ -1,28 +1,9 @@
-use crate::tasks::{Task, name_from_file};
+use crate::tasks::{Task};
 use std::cmp::PartialEq;
-use std::ops;
-use std::ops::Sub;
+use std::ops::{Sub, Add};
 use std::str::FromStr;
 
-pub struct Task01b {}
-
-impl Task01b {
-  pub const fn new() -> Task01b {
-    Task01b {}
-  }
-}
-
-impl Task for Task01b {
-  fn run(&self, data: &str) -> String {
-    data.split('\n')
-        .map(|line| line.parse().unwrap())
-        .fold(Dial::new(), |d, r| d + r)
-        .hits()
-        .to_string()
-  }
-
-  fn test_data(&self) -> &str {
-    "L68
+const TEST_DATA: &str = "L68
 L30
 R48
 L5
@@ -31,16 +12,25 @@ L55
 L1
 L99
 R14
-L82"
-  }
+L82";
 
-  fn test_answer(&self) -> &str {
-    "6"
-  }
+pub const T01A: Task = Task::new("t01a", TEST_DATA, "3", run_a);
+pub const T01B: Task = Task::new("t01b", TEST_DATA, "6", run_b);
 
-  fn name(&self) -> &str {
-    name_from_file(file!())
-  }
+fn run_a(data: &str) -> String {
+  data.split('\n')
+      .map(|line| line.parse().unwrap())
+      .fold(Dial::new(), |d, r| d.smooth(r))
+      .hits()
+      .to_string()
+}
+
+fn run_b(data: &str) -> String {
+  data.split('\n')
+      .map(|line| line.parse().unwrap())
+      .fold(Dial::new(), |d, r| d.steps(r))
+      .hits()
+      .to_string()
 }
 
 struct Dial {
@@ -49,19 +39,31 @@ struct Dial {
 }
 
 impl Dial {
-  pub fn new() -> Dial {
+  fn new() -> Dial {
     Dial { value: 50, hits: 0 }
   }
 
-  pub fn hits(&self) -> u16 {
+  fn hits(&self) -> u16 {
     self.hits
   }
-}
 
-impl ops::Add<Rot> for Dial {
-  type Output = Dial;
+  fn smooth(self, rot: Rot) -> Dial {
+    let value = if rot.dir == Dir::R {
+      self.value + rot.len
+    } else {
+      self.value - rot.len
+    };
+    let hits = if value % 100 == 0 {
+      self.hits + 1
+    } else {
+      self.hits
+    };
+    #[cfg(debug_assertions)]
+    println!("value {}, hits: {}", value, hits);
+    Dial { value, hits }
+  }
 
-  fn add(self, rot: Rot) -> Self::Output {
+  fn steps(self, rot: Rot) -> Dial {
     let op: fn(_: i32, _: i32) -> _ = if rot.dir == Dir::R {
       i32::add
     } else {
