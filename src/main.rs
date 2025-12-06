@@ -10,10 +10,10 @@ fn main() {
     get_tasks().for_each(|task| task.test());
     return;
   }
-  let file_name = &args[1];
-  let path_str = "./input/".to_owned() + &file_name + ".txt";
+  let task_name = &args[1];
+  let path_str = "./input/".to_owned() + &task_name + ".txt";
   let path = Path::new(&path_str);
   let data = fs::read_to_string(path).unwrap();
-  let result = find_task(file_name).unwrap().run(&data);
+  let result = find_task(task_name).unwrap().run(&data);
   println!("RESULT:\n{}", result);
 }
