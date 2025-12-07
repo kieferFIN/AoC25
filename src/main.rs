@@ -11,6 +11,10 @@ fn main() {
     return;
   }
   let task_name = &args[1];
+  if args.len() == 3 {
+    find_task(task_name).unwrap().test();
+    return;
+  }
   let path_str = "./input/".to_owned() + &task_name + ".txt";
   let path = Path::new(&path_str);
   let data = fs::read_to_string(path).unwrap();
