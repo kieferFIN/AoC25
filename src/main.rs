@@ -15,7 +15,7 @@ fn main() {
     find_task(task_name).unwrap().test();
     return;
   }
-  let path_str = "./input/".to_owned() + &task_name + ".txt";
+  let path_str = "./input/".to_owned() + &task_name[..task_name.len()-1] + ".txt";
   let path = Path::new(&path_str);
   let data = fs::read_to_string(path).unwrap();
   let result = find_task(task_name).unwrap().run(&data);
