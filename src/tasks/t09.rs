@@ -2,10 +2,6 @@ use std::cmp::{Ordering};
 use std::ops::Sub;
 use std::str::FromStr;
 use crate::tasks::Task;
-#[cfg(debug_assertions)]
-use plotters::backend::{BitMapBackend, DrawingBackend};
-#[cfg(debug_assertions)]
-use plotters::style::{BLUE, GREEN, RED, YELLOW};
 
 const TEST_DATA: &str = "7,1
 11,1
@@ -50,8 +46,6 @@ fn run_b(data: &str) -> String {
   }
   println!("{}", areas.len());
   println!("*****");
-  #[cfg(debug_assertions)]
-  let mut draw_area = draw_lines(&floor.data);
 
   let mut max_area = 0;
   for a in &areas {
@@ -59,21 +53,6 @@ fn run_b(data: &str) -> String {
       max_area = a.size()
     }
   }
-  #[cfg(debug_assertions)]
-  areas.iter().filter(|a| a.size() == 24).for_each(|a| {
-    for l in &a.smaller().unwrap().edges() {
-      let c = if floor.data.iter().any(|l1| l1.intersects(l)) {
-        RED
-      } else {
-        YELLOW
-      };
-      println!("{:?}, {:?}", l, &c);
-      let t = l.tuples(10);
-      draw_area.draw_line(t.0, t.1, &c).unwrap();
-    }
-  });
-  #[cfg(debug_assertions)]
-  draw_area.present().unwrap();
 
   max_area.to_string()
 }
@@ -236,18 +215,4 @@ impl Floor {
       false
     }
   }
-}
-
-#[cfg(debug_assertions)]
-fn draw_lines(lines: &'_ [Line]) -> BitMapBackend<'_> {
-  let mut root = BitMapBackend::new("lines.png", (150, 150));
-  let verticals: Vec<_> = lines.iter().filter(|l| l.is_vertical).map(|l| l.tuples(10)).collect();
-  let horizontals: Vec<_> = lines.iter().filter(|l| !l.is_vertical).map(|l| l.tuples(10)).collect();
-  for line in verticals {
-    root.draw_line(line.0, line.1, &BLUE).unwrap();
-  }
-  for line in horizontals {
-    root.draw_line(line.0, line.1, &GREEN).unwrap();
-  }
-  root
 }
