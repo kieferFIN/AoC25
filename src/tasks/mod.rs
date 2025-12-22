@@ -9,6 +9,7 @@ use crate::tasks::t08::{T08A, T08B};
 use crate::tasks::t09::{T09A, T09B};
 use crate::tasks::t10::{T10A, T10B};
 use crate::tasks::t11::{T11A, T11B};
+use crate::tasks::t12::T12A;
 
 mod t01;
 mod t02;
@@ -21,8 +22,9 @@ mod t08;
 mod t09;
 mod t10;
 mod t11;
+mod t12;
 
-const N: usize = 22;
+const N: usize = 23;
 pub const ALL_TASKS: [(&str, &Task); N] = [
   T01A.entry(), T01B.entry(),
   T02A.entry(), T02B.entry(),
@@ -34,7 +36,8 @@ pub const ALL_TASKS: [(&str, &Task); N] = [
   T08A.entry(), T08B.entry(),
   T09A.entry(), T09B.entry(),
   T10A.entry(), T10B.entry(),
-  T11A.entry(), T11B.entry()
+  T11A.entry(), T11B.entry(),
+  T12A.entry()
 ];
 
 pub fn get_tasks() -> impl Iterator<Item=&'static Task> {
